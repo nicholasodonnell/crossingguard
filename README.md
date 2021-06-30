@@ -83,7 +83,7 @@ docker run \
   --label "traefik.enable=true" \
   --label "traefik.http.routers.app.entrypoints=websecure" \
   --label "traefik.http.routers.app.rule=Host(`app.example.com`)" \
-  --label "traefik.http.routers.app.tls.certresolver=myresolver" \
+  --label "traefik.http.routers.app.tls.certresolver=crossingguard" \
   --label "traefik.http.services.app.loadbalancer.server.port=80" \
   --name app \
   --network=crossingguard \
@@ -101,7 +101,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.app.entrypoints=websecure"
       - "traefik.http.routers.app.rule=Host(`app.example.com`)"
-      - "traefik.http.routers.app.tls.certresolver=myresolver"
+      - "traefik.http.routers.app.tls.certresolver=crossingguard"
       - "traefik.http.services.app.loadbalancer.server.port=80"
     image: nginx
     networks:
