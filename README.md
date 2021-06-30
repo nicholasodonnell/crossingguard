@@ -31,12 +31,6 @@ To stop the collection:
 make down
 ```
 
-To start the collection in development mode:
-
-```
-make dev
-```
-
 To view logs of one or more running services:
 
 ```
