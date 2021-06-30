@@ -1,0 +1,7 @@
+# docker
+.env
+docker-compose.override.yml
+
+# traefik
+traefik/data/letsencrypt/*
+!traefik/data/letsencrypt/.gitkeep

@@ -1,0 +1,39 @@
+version: "3.5"
+services:
+
+  traefik:
+    build:
+      context: ./traefik
+    command:
+      - "--api.insecure=true"
+      - "--certificatesresolvers.crossingguard.acme.email=${LETSENCRYPT_EMAIL}"
+      - "--certificatesresolvers.crossingguard.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.crossingguard.acme.httpchallenge=true"
+      - "--certificatesresolvers.crossingguard.acme.storage=/letsencrypt/acme.json"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.websecure.address=:443"
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=${EXTERNAL_NETWORK}"
+      - "--providers.docker=true"
+    container_name: traefik
+    env_file:
+      - .env
+    expose:
+      - 8008
+    image: crossingguard/traefik:latest
+    networks:
+      - crossingguard
+    ports:
+      - ${TRAEFIK_HTTP_PORT}:80
+      - ${TRAEFIK_HTTPS_PORT}:443
+    volumes:
+      - ${TRAEFIK_LETSENCRYPT_DATA_PATH}:/letsencrypt
+      - ${DOCKER_SOCKET_PATH}:/var/run/docker.sock:ro
+
+networks:
+  crossingguard:
+    external:
+      name: ${EXTERNAL_NETWORK}
