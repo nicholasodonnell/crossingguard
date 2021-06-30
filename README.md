@@ -81,11 +81,11 @@ Where `<domain>` is the custom domain to assign to Traefik, `<port>` is the expo
 docker run \
   --expose=80 \
   --label "traefik.enable=true" \
-  --label "traefik.http.routers.foo.entrypoints=websecure" \
-  --label "traefik.http.routers.foo.rule=Host(`foo.example.com`)" \
-  --label "traefik.http.routers.foo.tls.certresolver=myresolver" \
-  --label "traefik.http.services.foo.loadbalancer.server.port=80" \
-  --name foo \
+  --label "traefik.http.routers.app.entrypoints=websecure" \
+  --label "traefik.http.routers.app.rule=Host(`app.example.com`)" \
+  --label "traefik.http.routers.app.tls.certresolver=myresolver" \
+  --label "traefik.http.services.app.loadbalancer.server.port=80" \
+  --name app \
   --network=crossingguard \
   nginx
 ```
@@ -99,10 +99,10 @@ services:
       - 80
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.foo.entrypoints=websecure"
-      - "traefik.http.routers.foo.rule=Host(`foo.example.com`)"
-      - "traefik.http.routers.foo.tls.certresolver=myresolver"
-      - "traefik.http.services.foo.loadbalancer.server.port=80"
+      - "traefik.http.routers.app.entrypoints=websecure"
+      - "traefik.http.routers.app.rule=Host(`app.example.com`)"
+      - "traefik.http.routers.app.tls.certresolver=myresolver"
+      - "traefik.http.services.app.loadbalancer.server.port=80"
     image: nginx
     networks:
       - crossingguard
