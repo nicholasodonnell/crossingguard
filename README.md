@@ -1,6 +1,6 @@
 <img src="logo/logo.png" />
 
-**Crossingguard** is a Dockerized [traefik](https://doc.traefik.io/traefik/) implementation for proxying Docker containers over SSL.
+**Crossingguard** is a Dockerized [Traefik](https://doc.traefik.io/traefik/) implementation for proxying Docker containers over SSL.
 
 ### Requirements
 
@@ -11,6 +11,7 @@
 ## Installation
 
 1. Create a `.env` file using [`.env.example`](.env.example) as a reference: `cp -n .env{.example,}`.
+2. Create a `docker-compose.override.yml` file using [`docker-compose.override.example.yml`](docker-compose.override.example.yml) as a reference: `cp -n docker-compose.override{.example,}.yml`.
 2. Build the docker images by running `make build`.
 
 ## Setup
@@ -69,7 +70,7 @@ After following the steps above you can create new docker containers that will a
 - "traefik.enable=true"
 - "traefik.http.routers.<name>.entrypoints=websecure"
 - "traefik.http.routers.<name>.rule=Host(`<domain>`)"
-- "traefik.http.routers.<name>.tls.certresolver=crossingguard"
+- "traefik.http.routers.<name>.tls.certresolver=letsencrypt"
 - "traefik.http.services.<name>.loadbalancer.server.port=<port>"
 ```
 
@@ -83,7 +84,7 @@ docker run \
   --label "traefik.enable=true" \
   --label "traefik.http.routers.app.entrypoints=websecure" \
   --label "traefik.http.routers.app.rule=Host(`app.example.com`)" \
-  --label "traefik.http.routers.app.tls.certresolver=crossingguard" \
+  --label "traefik.http.routers.app.tls.certresolver=letsencrypt" \
   --label "traefik.http.services.app.loadbalancer.server.port=80" \
   --name app \
   --network=crossingguard \
@@ -101,7 +102,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.app.entrypoints=websecure"
       - "traefik.http.routers.app.rule=Host(`app.example.com`)"
-      - "traefik.http.routers.app.tls.certresolver=crossingguard"
+      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
       - "traefik.http.services.app.loadbalancer.server.port=80"
     image: nginx
     networks:
@@ -111,6 +112,35 @@ networks:
   crossingguard:
     external:
       name: crossingguard
+```
+
+## Secure the Traefik dashboard
+
+The Traefik dashboard is available using a service called `api@internal`. All you have to do is to expose this service.
+To expose Traefik to the outside world, it is essential to add an authentication system otherwise anyone can get in.
+
+The securely expose the Traefik dashboard, add these labels to your `docker-compose.override.yml` file:
+
+```yaml
+# Proxying
+- "traefik.enable=true"
+- "traefik.http.routers.traefik.entrypoints=websecure"
+- "traefik.http.routers.traefik.rule=Host(`<domain>`)"
+- "traefik.http.routers.traefik.service=api@internal"
+- "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+- "traefik.http.services.traefik.loadbalancer.server.port=8080"
+
+# Auth
+- "traefik.http.middlewares.traefik-auth.basicauth.users=<username>:<htpasswd>"
+- "traefik.http.routers.traefik.middlewares=traefik-auth"
+```
+
+Where `<domain>` is your traefik dashboard domain, `<username>` is your http auth username, and `<htpasswd>` is your http auth password.
+
+To generate a http username/password you can use [htpasswd](https://httpd.apache.org/docs/2.4/programs/htpasswd.html) (using `sed` to escape the `$` present in the hash):
+
+```bash
+htpasswd -nb admin admin | sed -e s/\\$/\\$\\$/g
 ```
 
 ## Advanced Usage

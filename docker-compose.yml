@@ -5,24 +5,35 @@ services:
     build:
       context: ./traefik
     command:
-      - "--api.insecure=true"
-      - "--certificatesresolvers.crossingguard.acme.email=${LETSENCRYPT_EMAIL}"
-      - "--certificatesresolvers.crossingguard.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.crossingguard.acme.httpchallenge=true"
-      - "--certificatesresolvers.crossingguard.acme.storage=/letsencrypt/acme.json"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.websecure.address=:443"
+      # Docker configuration
       - "--providers.docker.endpoint=unix:///var/run/docker.sock"
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=${EXTERNAL_NETWORK}"
       - "--providers.docker=true"
+
+      # Configure entrypoint
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+
+      # SSL configuration
+      - "--certificatesresolvers.letsencrypt.acme.email=${LETSENCRYPT_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+
+        # Global HTTP -> HTTPS
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+
+      # Enable Dashboard
+      - "--api.insecure=true"
     container_name: traefik
     env_file:
       - .env
     expose:
-      - 8008
+      - 80
+      - 443
+      - 8080
     image: crossingguard/traefik:latest
     networks:
       - crossingguard
