@@ -1,4 +1,4 @@
-<img src="logo/logo.png" />
+<img src="logo/banner.png" />
 
 **Crossingguard** is a Dockerized [Traefik](https://doc.traefik.io/traefik/) implementation for proxying Docker containers over SSL.
 
@@ -114,7 +114,7 @@ networks:
       name: crossingguard
 ```
 
-## Secure the Traefik dashboard
+## Securing the Traefik dashboard
 
 The Traefik dashboard is available using a service called `api@internal`. All you have to do is to expose this service.
 To expose Traefik to the outside world, it is essential to add an authentication system otherwise anyone can get in.
