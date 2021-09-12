@@ -27,6 +27,9 @@ services:
 
       # Enable Dashboard
       - "--api.insecure=true"
+
+      # Prometheus
+      - "--metrics.prometheus=true"
     container_name: traefik
     env_file:
       - .env
