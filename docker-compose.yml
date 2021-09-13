@@ -16,6 +16,7 @@ services:
       - 3000
     image: crossingguard/grafana:latest
     networks:
+      - crossingguard-internal
       - crossingguard
 
   prometheus:
@@ -33,6 +34,7 @@ services:
       - 9090
     image: crossingguard/prometheus:latest
     networks:
+      - crossingguard-internal
       - crossingguard
 
   traefik:
@@ -76,13 +78,13 @@ services:
       - 8080
     image: crossingguard/traefik:latest
     networks:
+      - crossingguard-internal
       - crossingguard
-      - external
 
 networks:
-  crossingguard:
+  crossingguard-internal:
     driver: bridge
-    name: crossingguard
-  external:
+    name: crossingguard-internal
+  crossingguard:
     external:
       name: ${EXTERNAL_NETWORK}
