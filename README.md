@@ -54,11 +54,9 @@ make clean
 
 | Option                          | Description                                                                                                 |
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `DOCKER_SOCKET_PATH`            | The host docker socket path.                                                                                |
 | `EXTERNAL_NETWORK`              | Name of the external docker network for proxying.                                                           |
 | `EXTERNAL_NETWORK_OPTIONS`      | Docker network options when creating the external network.                                                  |
 | `LETSENCRYPT_EMAIL`             | Email so that Let's Encrypt can warn you about expiring certificates and allow you to recover your account. |
-| `TRAEFIK_LETSENCRYPT_DATA_PATH` | Host data path for Let's Encrypt configurations and certificates.                                           |
 | `TRAEFIK_HTTP_PORT`             | Locally exposed ports for HTTP on the host.                                                                 |
 | `TRAEFIK_HTTPS_PORT`            | Locally exposed ports for HTTPS on the host.                                                                |
 
@@ -119,10 +117,10 @@ networks:
 The Traefik dashboard is available using a service called `api@internal`. All you have to do is to expose this service.
 To expose Traefik to the outside world, it is essential to add an authentication system otherwise anyone can get in.
 
-The securely expose the Traefik dashboard, add these labels to your `docker-compose.override.yml` file:
+The securely expose the Traefik dashboard, modify these traefik labels in your `docker-compose.override.yml` file:
 
 ```yaml
-# Proxying
+# Traefik dashboard
 - "traefik.enable=true"
 - "traefik.http.routers.traefik.entrypoints=websecure"
 - "traefik.http.routers.traefik.rule=Host(`<domain>`)"
@@ -130,7 +128,7 @@ The securely expose the Traefik dashboard, add these labels to your `docker-comp
 - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
 - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
-# Auth
+# Traefik auth
 - "traefik.http.middlewares.traefik-auth.basicauth.users=<username>:<htpasswd>"
 - "traefik.http.routers.traefik.middlewares=traefik-auth"
 ```

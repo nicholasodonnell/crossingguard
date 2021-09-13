@@ -2,6 +2,14 @@
 .env
 docker-compose.override.yml
 
+# grafana
+grafana/config/*
+!grafana/config/.gitkeep
+
+# prometheus
+prometheus/config/*
+!prometheus/config/.gitkeep
+
 # traefik
 traefik/letsencrypt/*
 !traefik/letsencrypt/.gitkeep
