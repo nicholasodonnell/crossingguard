@@ -12,7 +12,7 @@
       }
     ]
   },
-  "description": "Traefik dashboard prometheus",
+  "description": "Traefik dashboard",
   "editable": true,
   "gnetId": 4475,
   "graphTooltip": 0,

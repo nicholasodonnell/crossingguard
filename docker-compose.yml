@@ -8,7 +8,7 @@ services:
     depends_on:
       - prometheus
     environment:
-      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+      - GF_INSTALL_PLUGINS=grafana-gauge-panel,grafana-piechart-panel
       - GF_USERS_ALLOW_SIGN_UP=false
     env_file:
       - .env

@@ -9,7 +9,7 @@ datasources:
   -
     name: Prometheus
     type: prometheus
-    access: server
+    access: Server
     orgId: 1
     url: http://prometheus:9090
     isDefault: true
