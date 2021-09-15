@@ -9,9 +9,9 @@ datasources:
   -
     name: Prometheus
     type: prometheus
-    access: browser
+    access: server
     orgId: 1
-    url: http://prometheus
+    url: http://prometheus:9090
     isDefault: true
     jsonData:
       graphiteVersion: "1.1"

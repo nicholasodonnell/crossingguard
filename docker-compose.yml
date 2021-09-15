@@ -50,7 +50,6 @@ services:
       # Configure entrypoints
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
-      - "--entryPoints.metrics.address=:8082"
 
       # SSL configuration
       - "--certificatesresolvers.letsencrypt.acme.email=${LETSENCRYPT_EMAIL}"
@@ -67,7 +66,6 @@ services:
 
       # Prometheus
       - "--metrics.prometheus=true"
-      - "--metrics.prometheus.entryPoint=metrics"
     container_name: traefik
     env_file:
       - .env
