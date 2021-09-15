@@ -8,6 +8,12 @@
 - [Docker Compose](https://docs.docker.com/compose/)
 - [GNU make](https://www.gnu.org/software/make/)
 
+### Services
+
+- **Traefik** - HTTP reverse proxy.
+- **Grafana** - Analytic visualization.
+- **Prometheus** - Metrics store.
+
 ## Installation
 
 1. Create a `.env` file using [`.env.example`](.env.example) as a reference: `cp -n .env{.example,}`.
@@ -57,6 +63,10 @@ make clean
 | `DOCKER_SOCKET_PATH`            | The host docker socket path.                                                                                |
 | `EXTERNAL_NETWORK`              | Name of the external docker network for proxying.                                                           |
 | `EXTERNAL_NETWORK_OPTIONS`      | Docker network options when creating the external network.                                                  |
+| `GRAFANA_DATA_PATH`             | Host location for Grafana data.                                                                             |
+| `GRAFANA_USER`                  | Grafana admin username.                                                                                     |
+| `GRAFANA_PASSWORD`              | Grafana admin password.                                                                                     |
+| `PROMETHEUS_DATA_PATH`          | Host location for Prometheus data.                                                                          |
 | `LETSENCRYPT_EMAIL`             | Email so that Let's Encrypt can warn you about expiring certificates and allow you to recover your account. |
 | `TRAEFIK_LETSENCRYPT_DATA_PATH` | Host data path for Let's Encrypt configurations and certificates.                                           |
 | `TRAEFIK_HTTP_PORT`             | Locally exposed ports for HTTP on the host.                                                                 |
@@ -119,10 +129,10 @@ networks:
 The Traefik dashboard is available using a service called `api@internal`. All you have to do is to expose this service.
 To expose Traefik to the outside world, it is essential to add an authentication system otherwise anyone can get in.
 
-The securely expose the Traefik dashboard, add these labels to your `docker-compose.override.yml` file:
+The securely expose the Traefik dashboard, modify these traefik labels in your `docker-compose.override.yml` file:
 
 ```yaml
-# Proxying
+# Traefik dashboard
 - "traefik.enable=true"
 - "traefik.http.routers.traefik.entrypoints=websecure"
 - "traefik.http.routers.traefik.rule=Host(`<domain>`)"
@@ -130,7 +140,7 @@ The securely expose the Traefik dashboard, add these labels to your `docker-comp
 - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
 - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
-# Auth
+# Traefik auth
 - "traefik.http.middlewares.traefik-auth.basicauth.users=<username>:<htpasswd>"
 - "traefik.http.routers.traefik.middlewares=traefik-auth"
 ```
@@ -142,6 +152,22 @@ To generate a http username/password you can use [htpasswd](https://httpd.apache
 ```bash
 htpasswd -nb admin admin | sed -e s/\\$/\\$\\$/g
 ```
+
+## Collect and visualize analytics
+
+Traefik metrics are collected by **Prometheus**. To visualize these metrics you must expose the **Grafana** container.
+
+To expose Grafana, simply proxy the container through Traefik by modifying these labels in your `docker-compose.override.yml` file:
+
+```yaml
+- "traefik.enable=true"
+- "traefik.http.routers.grafana.entrypoints=websecure"
+- "traefik.http.routers.grafana.rule=Host(`<domain>`)"
+- "traefik.http.routers.grafana.tls.certresolver=letsencrypt"
+- "traefik.http.services.grafana.loadbalancer.server.port=3000"
+```
+
+Where `<domain>` is your grafana domain. The username and password can be set using the [ENV Options](#env-options) above.
 
 ## Advanced Usage
 

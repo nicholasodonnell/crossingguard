@@ -1,7 +1,54 @@
 version: "3.5"
 services:
 
+  grafana:
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
+    ##################################################################
+    # modify the labels below to expose the grafana dashboard
+    ##################################################################
+    # labels:
+      # - "traefik.enable=true"
+      # - "traefik.http.routers.grafana.entrypoints=websecure"
+      # - "traefik.http.routers.grafana.rule=Host(`<domain>`)"
+      # - "traefik.http.routers.grafana.tls.certresolver=letsencrypt"
+      # - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+    volumes:
+      - ${GRAFANA_DATA_PATH}:/var/lib/grafana
+
+  prometheus:
+    ##################################################################
+    # modify the labels below to expose the prometheus dashboard
+    ##################################################################
+    # labels:
+      # - "traefik.enable=true"
+      # - "traefik.http.routers.prometheus.entrypoints=websecure"
+      # - "traefik.http.routers.prometheus.rule=Host(`<domain>`)"
+      # - "traefik.http.routers.prometheus.tls.certresolver=letsencrypt"
+      # - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+    volumes:
+      - ${PROMETHEUS_DATA_PATH}:/config
+
   traefik:
+    ##################################################################
+    # modify the labels below to securely expose the Traefik dashboard
+    ##################################################################
+    # labels:
+      # Traefik dashboard
+      # - "traefik.enable=true"
+      # - "traefik.http.routers.traefik.entrypoints=websecure"
+      # - "traefik.http.routers.traefik.rule=Host(`<domain>`)"
+      # - "traefik.http.routers.traefik.service=api@internal"
+      # - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+      # - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+
+      # Traefik auth
+      # - "traefik.http.middlewares.traefik-auth.basicauth.users=<username>:<htpasswd>"
+      # - "traefik.http.routers.traefik.middlewares=traefik-auth"
     ports:
       - ${TRAEFIK_HTTP_PORT}:80
       - ${TRAEFIK_HTTPS_PORT}:443
+    volumes:
+      - ${TRAEFIK_LETSENCRYPT_DATA_PATH}:/letsencrypt
+      - ${DOCKER_SOCKET_PATH}:/var/run/docker.sock:ro
