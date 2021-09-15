@@ -10,12 +10,12 @@ datasources:
     name: Prometheus
     type: prometheus
     access: Server
+    editable: false
+    isDefault: true
     orgId: 1
     url: http://prometheus:9090
-    isDefault: true
+    version: 1
     jsonData:
       graphiteVersion: "1.1"
       tlsAuth: false
       tlsAuthWithCACert: false
-    version: 1
-    editable: true
