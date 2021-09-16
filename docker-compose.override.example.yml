@@ -2,9 +2,6 @@ version: "3.5"
 services:
 
   grafana:
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
     ##################################################################
     # modify the labels below to expose the grafana dashboard
     ##################################################################

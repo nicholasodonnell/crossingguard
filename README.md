@@ -64,8 +64,6 @@ make clean
 | `EXTERNAL_NETWORK`              | Name of the external docker network for proxying.                                                           |
 | `EXTERNAL_NETWORK_OPTIONS`      | Docker network options when creating the external network.                                                  |
 | `GRAFANA_DATA_PATH`             | Host location for Grafana data.                                                                             |
-| `GRAFANA_USER`                  | Grafana admin username.                                                                                     |
-| `GRAFANA_PASSWORD`              | Grafana admin password.                                                                                     |
 | `PROMETHEUS_DATA_PATH`          | Host location for Prometheus data.                                                                          |
 | `LETSENCRYPT_EMAIL`             | Email so that Let's Encrypt can warn you about expiring certificates and allow you to recover your account. |
 | `TRAEFIK_LETSENCRYPT_DATA_PATH` | Host data path for Let's Encrypt configurations and certificates.                                           |
@@ -154,7 +152,7 @@ To generate a http username/password you can use [htpasswd](https://httpd.apache
 htpasswd -nb admin admin | sed -e s/\\$/\\$\\$/g
 ```
 
-## Collect and visualize analytics
+## Collect and visualize metrics
 
 Traefik metrics are collected by **Prometheus**. To visualize these metrics you must expose the **Grafana** container.
 
@@ -168,7 +166,7 @@ To expose Grafana, simply proxy the container through Traefik by modifying these
 - "traefik.http.services.grafana.loadbalancer.server.port=3000"
 ```
 
-Where `<domain>` is your grafana domain. The username and password can be set using the [ENV Options](#env-options) above.
+Where `<domain>` is your grafana domain. The default user is `admin` with password `admin`.
 
 ## Advanced Usage
 
