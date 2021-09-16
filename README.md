@@ -71,6 +71,7 @@ make clean
 | `TRAEFIK_LETSENCRYPT_DATA_PATH` | Host data path for Let's Encrypt configurations and certificates.                                           |
 | `TRAEFIK_HTTP_PORT`             | Locally exposed ports for HTTP on the host.                                                                 |
 | `TRAEFIK_HTTPS_PORT`            | Locally exposed ports for HTTPS on the host.                                                                |
+| `TRAEFIK_PILOT_TOKEN`           | A multi-digit key that identifies a Traefik Pilot instance.                                                 |
 
 ## Proxying Docker Containers
 

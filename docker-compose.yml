@@ -65,6 +65,9 @@ services:
       # Enable Dashboard
       - "--api.insecure=true"
 
+      # Pilot
+      - "--pilot.token=${TRAEFIK_PILOT_TOKEN}"
+
       # Prometheus
       - "--metrics.prometheus=true"
       - "--metrics.prometheus.entryPoint=metrics"
