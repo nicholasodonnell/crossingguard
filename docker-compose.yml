@@ -69,7 +69,7 @@ services:
       - "--pilot.token=${TRAEFIK_PILOT_TOKEN}"
 
       # Prometheus
-      - "--metrics.prometheus=true"
+      - "--metrics.prometheus=${ENABLE_METRICS}"
       - "--metrics.prometheus.entryPoint=metrics"
     container_name: traefik
     env_file:

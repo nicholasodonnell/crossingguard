@@ -55,10 +55,21 @@ network: ## create external network
 					$(EXTERNAL_NETWORK_OPTIONS)
 
 up: ## start collection
+ifeq ($(ENABLE_METRICS),true)
 	@docker-compose ${DOCKER_COMPOSE_ARGS} \
 		up \
 			--detach \
-			--remove-orphans
+			--remove-orphans \
+			traefik \
+			grafana \
+			prometheus
+else
+	@docker-compose ${DOCKER_COMPOSE_ARGS} \
+		up \
+			--detach \
+			--remove-orphans \
+			traefik
+endif
 
 .PHONY: \
 	help \

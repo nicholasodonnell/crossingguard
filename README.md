@@ -65,6 +65,7 @@ make clean
 | `EXTERNAL_NETWORK_OPTIONS`      | Docker network options when creating the external network.                                                  |
 | `GRAFANA_DATA_PATH`             | Host location for Grafana data.                                                                             |
 | `PROMETHEUS_DATA_PATH`          | Host location for Prometheus data.                                                                          |
+| `ENABLE_METRICS`                | Enable metric collection with Grafana and Prometheus. If false, only Traefik is started.                    |
 | `LETSENCRYPT_EMAIL`             | Email so that Let's Encrypt can warn you about expiring certificates and allow you to recover your account. |
 | `TRAEFIK_LETSENCRYPT_DATA_PATH` | Host data path for Let's Encrypt configurations and certificates.                                           |
 | `TRAEFIK_HTTP_PORT`             | Locally exposed ports for HTTP on the host.                                                                 |
